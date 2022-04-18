@@ -151,7 +151,7 @@ def evaluate(model=None):
 
 def unsupervised_train():
     dataset = Unsupervised()
-    dataloader = DataLoader(dataset, batch_size=156, shuffle=True, drop_last=True)
+    dataloader = DataLoader(dataset, batch_size=256, shuffle=True, drop_last=True)
     model = TextBackbone()
     model = nn.DataParallel(model)
     model = model.cuda()
@@ -184,7 +184,7 @@ def unsupervised_train():
     criterion = unsup_loss
     for epoch in range(1, epochs + 1):
         train(dataloader, model, optimizer, schedular, criterion)
-        torch.save(model.state_dict(), "./output/unsup_epoch_{}.pt".format(epoch))
+        torch.save(model.state_dict(), "./output/pre+unsup_epoch_{}.pt".format(epoch))
         score = evaluate(model)
 
 
@@ -192,12 +192,12 @@ def supervised_train():
     dataset = Supervised()
     dataloader = DataLoader(dataset, batch_size=128, shuffle=True, drop_last=True)
 
-    # log_file = prepare()
-    model = TextBackbone()
+    # 加载模型
+    model = TextBackbone(pretrained='./output/checkpoint2')
     model = nn.DataParallel(model)
-    # print(model)
-    # 加载无监督预训练的模型
-    model.load_state_dict(torch.load("./output/unsup_epoch_2.pt"))
+    # # print(model)
+    # # 加载无监督预训练的模型
+    # model.load_state_dict(torch.load("unsup_epoch_1.pt"))
     model = model.cuda()
     param_optimizer = list(model.named_parameters())
     no_decay = ["bias", "LayerNorm.bias", "LayerNorm.weight"]

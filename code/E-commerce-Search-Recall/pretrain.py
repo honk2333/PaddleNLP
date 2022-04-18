@@ -20,8 +20,12 @@ batch_size = 96
 tokenizer = AutoTokenizer.from_pretrained(
             '/home/data_ti6_c/wanghk/bert_model/chinese-roberta-wwm-ext')
 
+# 继续预训练
 model = AutoModelForMaskedLM.from_pretrained(
-    '/home/data_ti6_c/wanghk/bert_model/chinese-roberta-wwm-ext')
+    '/home/wanghk/PaddleNLP/code/E-commerce-Search-Recall/SimCSE/output/checkpoint')
+
+# model = AutoModelForMaskedLM.from_pretrained(
+#     '/home/data_ti6_c/wanghk/bert_model/chinese-roberta-wwm-ext')
 
 dataset = LineByLineTextDataset(
     tokenizer=tokenizer,
